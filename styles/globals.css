@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .icon {
+    @apply flex cursor-pointer items-center space-x-2 rounded-sm p-2 text-sm font-semibold hover:bg-gray-100;
+  }
+  .voteButtons {
+    @apply h-6 w-6 rounded-md p-1 hover:bg-gray-200;
+  }
+  .postButtons {
+    @apply flex cursor-pointer items-center space-x-1 rounded-sm p-2 text-sm font-semibold hover:bg-gray-100;
+  }
+  .input {
+    @apply block w-full rounded-full border-none py-3 pl-10 text-left text-lg font-semibold shadow-none outline-none focus:border-none focus:bg-white focus:shadow-none focus:outline-none focus:ring-0 active:bg-white dark:text-black md:w-full md:max-w-lg;
+  }
+  .navBtn {
+    @apply h-5 w-5 cursor-pointer items-center transition-all duration-150 ease-out hover:scale-105;
+  }
+  .dialog {
+    @apply inline-block w-full max-w-md transform overflow-hidden rounded-2xl bg-black p-6 text-left align-middle text-black shadow-xl transition-all dark:text-white;
+  }
+  .footer {
+    @apply font-medium  tracking-wide underline transition duration-500 ease-in-out hover:text-opacity-50;
+  }
+  .header {
+    @apply h-6 w-6 items-center  hover:bg-gray-100;
+  }
+}
