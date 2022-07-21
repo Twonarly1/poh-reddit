@@ -45,7 +45,7 @@ function MyApp({ Component, pageProps: { pageProps } }: AppProps) {
         >
           <Toaster />
           <Head>
-            <title>reddit clone</title>
+            <title>poh reddit</title>
             <link rel="icon" href="/images/proofofhumanity.png" />
           </Head>
           <div className="h-screen overflow-y-scroll bg-slate-200">
