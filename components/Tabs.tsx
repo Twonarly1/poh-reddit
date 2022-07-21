@@ -46,7 +46,7 @@ const Tabs = () => {
       router.push("/");
     } else {
       if (tabName == "registry") {
-        router.push(`https://poh-tools.vercel.app/registry`);
+        router.push(`https://poh-registry.vercel.app/registry`);
       } else {
         router.push(`/${tabName}`);
       }
