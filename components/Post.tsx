@@ -25,7 +25,7 @@ type Props = {
 
 function Post({ post }: Props) {
   const [vote, setVote] = useState<boolean>();
-  const { data: accountData, isError, isLoading } = useAccount();
+  const { address, isConnecting, isDisconnected } = useAccount();
   //console.log('post:', post)
   const { data: ensData } = useEnsName({
     address: post?.username,
@@ -44,15 +44,13 @@ function Post({ post }: Props) {
     const votes: Vote[] = data?.getVotesByPostId;
     // Latest vote (as we sorted by newly created first in SQL query)
     // Notes: you could improive this by moving it to the original query
-    const vote = votes?.find(
-      (vote) => vote.username == accountData?.address
-    )?.upvote;
+    const vote = votes?.find((vote) => vote.username == address)?.upvote;
 
     setVote(vote);
   }, [data]);
 
   const upVote = async (isUpvote: boolean) => {
-    if (!accountData) {
+    if (!address) {
       toast("! You'll need to sign in to vote!");
       return;
     }
@@ -67,7 +65,7 @@ function Post({ post }: Props) {
     } = await addVote({
       variables: {
         post_id: post.id,
-        username: accountData?.address,
+        username: address,
         upvote: isUpvote,
       },
     });
@@ -155,7 +153,7 @@ function Post({ post }: Props) {
                   {post.comments.length} Comments
                 </p>
               </div>
-              <div className="postButtons">
+              {/* <div className="postButtons">
                 <GiftIcon className="h-6 w-6" />
                 <p className="hidden sm:inline">Award</p>
               </div>
@@ -170,7 +168,7 @@ function Post({ post }: Props) {
               <div className="postButtons">
                 <DotsHorizontalIcon className="h-6 w-6" />
                 <p className=""></p>
-              </div>
+              </div> */}
             </div>
           </div>
         </Link>

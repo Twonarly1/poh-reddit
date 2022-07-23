@@ -25,7 +25,7 @@ type Props = {
 };
 
 function PostBox({ subreddit }: Props) {
-  const { data: accountData, isError, isLoading } = useAccount();
+  const { address, isConnecting, isDisconnected } = useAccount();
   const [imageBoxOpen, setImageBoxOpen] = useState(false);
   const [addSubreddit] = useMutation(ADD_SUBREDDIT);
   const [addPost] = useMutation(ADD_POST, {
@@ -90,7 +90,7 @@ function PostBox({ subreddit }: Props) {
             image: image,
             subreddit_id: newSubreddit.id,
             title: formData.postTitle,
-            username: accountData?.address,
+            username: address,
           },
         });
 
@@ -110,7 +110,7 @@ function PostBox({ subreddit }: Props) {
             image: image,
             subreddit_id: getSubredditListByTopic[0].id,
             title: formData.postTitle,
-            username: accountData?.address,
+            username: address,
           },
         });
       }
@@ -141,11 +141,11 @@ function PostBox({ subreddit }: Props) {
         <Avatar />
         <input
           {...register("postTitle", { required: true })}
-          disabled={!accountData}
+          disabled={!address}
           className="flex-1 rounded-md bg-gray-50 p-2 pl-5 outline-none "
           type="text"
           placeholder={
-            accountData
+            address
               ? subreddit
                 ? `Create a Post in r/${subreddit}`
                 : "Create a Post by entering a title..."

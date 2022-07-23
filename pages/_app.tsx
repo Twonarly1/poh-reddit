@@ -4,25 +4,30 @@ import Header from "../components/Header";
 import Head from "next/head";
 import { ApolloProvider } from "@apollo/client";
 import { Toaster } from "react-hot-toast";
-import { chain, createClient, WagmiProvider } from "wagmi";
 import apolloClient from "../apollo-client";
-import "@rainbow-me/rainbowkit/styles.css";
 import {
-  apiProvider,
+  WagmiConfig,
+  createClient,
   configureChains,
-  getDefaultWallets,
-  lightTheme,
-  RainbowKitProvider,
-} from "@rainbow-me/rainbowkit";
+  chain,
+  defaultChains,
+} from "wagmi";
+import { publicProvider } from "wagmi/providers/public";
+import { InjectedConnector } from "wagmi/connectors/injected";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import "@rainbow-me/rainbowkit/styles.css";
+import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 
 const { chains, provider } = configureChains(
   [chain.mainnet],
-  [apiProvider.fallback()]
+  [publicProvider()]
 );
+
 const { connectors } = getDefaultWallets({
   appName: "My RainbowKit App",
   chains,
 });
+
 const wagmiClient = createClient({
   autoConnect: true,
   connectors,
@@ -32,17 +37,9 @@ const wagmiClient = createClient({
 function MyApp({ Component, pageProps: { pageProps } }: AppProps) {
   return (
     <ApolloProvider client={apolloClient}>
-      <WagmiProvider client={wagmiClient}>
-        <RainbowKitProvider
-          coolMode={true}
-          chains={chains}
-          theme={lightTheme({
-            accentColor: "#FFAD33",
-            accentColorForeground: "white",
-            borderRadius: "small",
-            fontStack: "system",
-          })}
-        >
+      <WagmiConfig client={wagmiClient}>
+        <RainbowKitProvider chains={chains}>
+          {" "}
           <Toaster />
           <Head>
             <title>poh reddit</title>
@@ -53,7 +50,7 @@ function MyApp({ Component, pageProps: { pageProps } }: AppProps) {
             <Component {...pageProps} />
           </div>
         </RainbowKitProvider>
-      </WagmiProvider>
+      </WagmiConfig>{" "}
     </ApolloProvider>
   );
 }
