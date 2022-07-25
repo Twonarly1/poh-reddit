@@ -3,16 +3,12 @@ import Image from "next/image";
 import { useAccount } from "wagmi";
 
 type Props = {
-  seed?: string;
+  seed?: string | number;
   large?: boolean;
 };
 
 const Avatar = ({ seed, large }: Props) => {
-  const { address, isConnecting, isDisconnected } = useAccount();
-
-  if (isConnecting) return <div>Connecting…</div>;
-  if (isDisconnected) return <div>Disconnected</div>;
-
+  const { address } = useAccount();
   return (
     <div
       className={` relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full border-gray-300 bg-white shadow-md ring-2 ring-white hover:ring-primary-orange ${

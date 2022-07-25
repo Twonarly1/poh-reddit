@@ -6,9 +6,10 @@ import {
   ChatAlt2Icon,
   HomeIcon,
 } from "@heroicons/react/outline";
-import toast from "react-hot-toast";
-import { Tab } from "@headlessui/react";
-import Link from "next/link";
+import { useAccount } from "wagmi";
+import axios from "axios";
+import ConnectButton from "./ConnectButton";
+import { useFetch } from "../lib/useFetch";
 
 type Tab = {
   name: string;
@@ -17,29 +18,40 @@ type Tab = {
 };
 
 const navTabs: Tab[] = [
-  {
-    name: "home",
-    Icon: HomeIcon,
-    path: "/",
-  },
-  // {
-  //   name: "reddit",
-  //   Icon: ChatAlt2Icon,
-  // },
-  {
-    name: "registry",
-    Icon: SearchIcon,
-    path: "https://poh-tools.vercel.app/",
-  },
-  //   {
-  //     name: 'filter',
-  //     Icon: FilterIcon,
-  //   },
+  { name: "home", Icon: HomeIcon, path: "/" },
+  { name: "registry", Icon: SearchIcon, path: "https://poh-tools.vercel.app/" },
+  // { name: "reddit", Icon: ChatAlt2Icon},
+  //   { name: 'filter', Icon: FilterIcon },
 ];
 
 const Tabs = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<string>("");
+  const { isConnected, address } = useAccount();
+  const [isUserRegistered, setIsUserRegistered] = useState<boolean>(false);
+  const fetchUrl = `https://api.poh.dev/profiles/${address}`;
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get(fetchUrl);
+      setIsUserRegistered(response.data.registered);
+    }
+    fetchData();
+  }, [address]);
+
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const response: any = await axios.get(fetchUrl);
+  //     setIsUserRegistered(response);
+  //   }
+  //   fetchData();
+  // }, [isConnected]);
+  // const [url, setUrl] = useState(`https://api.poh.dev/profiles/${address}`);
+
+  // const { isUserRegistered } = useFetch({
+  //   url,
+  //   onSuccess: () => console.log(isUserRegistered),
+  // });
 
   const handleClick = (tabName: string) => {
     if (tabName == "home") {
@@ -81,6 +93,7 @@ const Tabs = () => {
           </div>
         </a>
       ))}
+      <ConnectButton />
     </div>
   );
 };

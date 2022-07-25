@@ -1,5 +1,5 @@
 import { LinkIcon, PhotographIcon } from "@heroicons/react/outline";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
 import client from "../apollo-client";
@@ -12,6 +12,8 @@ import {
 } from "../graphql/queries";
 import Avatar from "./Avatar";
 import { useAccount } from "wagmi";
+import axios from "axios";
+import { useFetch } from "../lib/useFetch";
 
 type FormData = {
   postTitle: string;
@@ -25,7 +27,17 @@ type Props = {
 };
 
 function PostBox({ subreddit }: Props) {
-  const { address, isConnecting, isDisconnected } = useAccount();
+  const { isConnected, address } = useAccount();
+  const [isUserRegistered, setIsUserRegistered] = useState<boolean>(false);
+  const fetchUrl = `https://api.poh.dev/profiles/${address}`;
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get(fetchUrl);
+      setIsUserRegistered(response.data.registered);
+    }
+    fetchData();
+  }, [address]);
+
   const [imageBoxOpen, setImageBoxOpen] = useState(false);
   const [addSubreddit] = useMutation(ADD_SUBREDDIT);
   const [addPost] = useMutation(ADD_POST, {
@@ -130,98 +142,102 @@ function PostBox({ subreddit }: Props) {
     }
   });
 
-  // console.log(subreddit)
+  function getRandomInt(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className="sticky top-16 z-50 rounded-md border border-primary-orange bg-white p-2"
-    >
-      <div className="flex items-center space-x-3">
-        <Avatar />
-        <input
-          {...register("postTitle", { required: true })}
-          disabled={!address}
-          className="flex-1 rounded-md bg-gray-50 p-2 pl-5 outline-none "
-          type="text"
-          placeholder={
-            address
-              ? subreddit
-                ? `Create a Post in r/${subreddit}`
-                : "Create a Post by entering a title..."
-              : "Sign in to Post!"
-          }
-        />
+    <>
+      <form
+        onSubmit={onSubmit}
+        className="sticky top-16 z-50 rounded-md border border-primary-orange bg-white p-2"
+      >
+        <div className="flex items-center space-x-3">
+          <Avatar />
+          <input
+            {...register("postTitle", { required: true })}
+            disabled={!isUserRegistered}
+            className="flex-1 rounded-md bg-gray-50 p-2 pl-5 outline-none "
+            type="text"
+            placeholder={
+              address
+                ? subreddit
+                  ? `Create a Post in r/${subreddit}`
+                  : "Create a Post by entering a title..."
+                : "Sign in to Post!"
+            }
+          />
 
-        <PhotographIcon
-          onClick={() => setImageBoxOpen(!imageBoxOpen)}
-          className={`h-6 text-gray-300 ${
-            imageBoxOpen && "text-blue-300"
-          } cursor-pointer`}
-        />
-        <LinkIcon className="h-6 text-gray-300" />
-      </div>
+          <PhotographIcon
+            onClick={() => setImageBoxOpen(!imageBoxOpen)}
+            className={`h-6 text-gray-300 ${
+              imageBoxOpen && "text-blue-300"
+            } cursor-pointer`}
+          />
+          <LinkIcon className="h-6 text-gray-300" />
+        </div>
 
-      {!!watch("postTitle") && (
-        <div className="flex flex-col py-2">
-          <div className="flex items-center px-2">
-            <p className="min-w-[90px]">Body:</p>
-            <input
-              className="m-2 flex-1 bg-blue-50 p-2 outline-none"
-              {...register("postBody")}
-              type="text"
-              placeholder="Text (optional)"
-            />
+        {!!watch("postTitle") && (
+          <div className="flex flex-col py-2">
+            <div className="flex items-center px-2">
+              <p className="min-w-[90px]">Body:</p>
+              <input
+                className="m-2 flex-1 bg-blue-50 p-2 outline-none"
+                {...register("postBody")}
+                type="text"
+                placeholder="Text (optional)"
+              />
+            </div>
+
+            {!subreddit && (
+              <div className="flex items-center px-2">
+                <p className="min-w-[90px]">Subreddit:</p>
+                <input
+                  className="m-2 flex-1 bg-blue-50 p-2 outline-none"
+                  {...register("subreddit", { required: true })}
+                  type="text"
+                  placeholder="i.e. Reactjs"
+                />
+              </div>
+            )}
+
+            {imageBoxOpen && (
+              <div className="flex items-center px-2">
+                <p className="min-w-[90px]">Image URL:</p>
+                <input
+                  className="m-2 flex-1 bg-blue-50 p-2 outline-none"
+                  {...register("postImage")}
+                  type="text"
+                  placeholder="Optional..."
+                />
+              </div>
+            )}
           </div>
+        )}
 
-          {!subreddit && (
-            <div className="flex items-center px-2">
-              <p className="min-w-[90px]">Subreddit:</p>
-              <input
-                className="m-2 flex-1 bg-blue-50 p-2 outline-none"
-                {...register("subreddit", { required: true })}
-                type="text"
-                placeholder="i.e. Reactjs"
-              />
-            </div>
-          )}
+        {/* Errors */}
+        {Object.keys(errors).length > 0 && (
+          <div className="space-y-2 p-2 text-red-500">
+            {errors.postTitle?.type === "required" && (
+              <p>- A Post Title is required</p>
+            )}
 
-          {imageBoxOpen && (
-            <div className="flex items-center px-2">
-              <p className="min-w-[90px]">Image URL:</p>
-              <input
-                className="m-2 flex-1 bg-blue-50 p-2 outline-none"
-                {...register("postImage")}
-                type="text"
-                placeholder="Optional..."
-              />
-            </div>
-          )}
-        </div>
-      )}
+            {errors.subreddit?.type === "required" && (
+              <p>- A Subreddit is required</p>
+            )}
+          </div>
+        )}
 
-      {/* Errors */}
-      {Object.keys(errors).length > 0 && (
-        <div className="space-y-2 p-2 text-red-500">
-          {errors.postTitle?.type === "required" && (
-            <p>- A Post Title is required</p>
-          )}
-
-          {errors.subreddit?.type === "required" && (
-            <p>- A Subreddit is required</p>
-          )}
-        </div>
-      )}
-
-      {!!watch("postTitle") && (
-        <button
-          className="w-full rounded-full bg-primary-orange p-2 text-white"
-          type="submit"
-        >
-          Create Post
-        </button>
-      )}
-    </form>
+        {!!watch("postTitle") && (
+          <button
+            className="w-full rounded-full bg-primary-orange p-2 text-white"
+            type="submit"
+          >
+            Create Post
+          </button>
+        )}
+      </form>
+    </>
   );
 }
 

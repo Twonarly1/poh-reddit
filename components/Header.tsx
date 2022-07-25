@@ -1,44 +1,49 @@
-import React, { Fragment, useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
+import React, { Fragment, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import {
   SearchIcon,
   FilterIcon,
   ChatAlt2Icon,
   HomeIcon,
   MenuIcon,
-} from '@heroicons/react/outline'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
-import Tabs from './Tabs'
-import { useRouter } from 'next/router'
-import { Dialog, Transition } from '@headlessui/react'
+} from "@heroicons/react/outline";
+import Tabs from "./Tabs";
+import { useRouter } from "next/router";
+import { Dialog, Transition } from "@headlessui/react";
+import { useAccount } from "wagmi";
+import { useIsMounted } from "../lib/useIsMounted";
+import pohIcon from "../public/images/proofofhumanity.png";
 
 const Header = () => {
-  const router = useRouter()
-  const [open, setOpen] = useState(false)
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const isMounted = useIsMounted();
+  const { isConnected } = useAccount();
 
   return (
     <>
       <div className="w-full bg-white shadow-lg">
         <div className="sticky top-0 z-50 mx-auto flex w-screen max-w-5xl items-center justify-between bg-white px-8 py-2">
           <div
-            onClick={() => router.push('/')}
+            onClick={() => router.push("/")}
             className="relative h-12 w-12 flex-shrink-0 cursor-pointer sm:flex"
           >
             <Image
               priority
+              placeholder="blur"
               objectFit="contain"
               layout="fill"
-              src="/images/proofofhumanity.png"
+              src={pohIcon}
             />
           </div>
+
           <div className="flex items-center space-x-2 ">
             <MenuIcon
               className="h-6 w-6 cursor-pointer sm:hidden"
               onClick={() => setOpen(true)}
             />
             <Tabs />
-            <ConnectButton />
           </div>
         </div>
       </div>
@@ -132,7 +137,7 @@ const Header = () => {
         </Dialog>
       </Transition.Root>
     </>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
