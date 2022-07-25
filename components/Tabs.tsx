@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { SVGProps, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SearchIcon,
   FilterIcon,
@@ -8,14 +8,9 @@ import {
 } from "@heroicons/react/outline";
 import { useAccount } from "wagmi";
 import axios from "axios";
-import ConnectButton from "./ConnectButton";
 import { useFetch } from "../lib/useFetch";
-
-type Tab = {
-  name: string;
-  Icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
-  path: string;
-};
+import { Tab } from "../typings";
+import { capitalizeFirstLetter } from "../lib/utils";
 
 const navTabs: Tab[] = [
   { name: "home", Icon: HomeIcon, path: "/" },
@@ -30,14 +25,6 @@ const Tabs = () => {
   const { isConnected, address } = useAccount();
   const [isUserRegistered, setIsUserRegistered] = useState<boolean>(false);
   const fetchUrl = `https://api.poh.dev/profiles/${address}`;
-
-  useEffect(() => {
-    async function fetchData() {
-      const response = await axios.get(fetchUrl);
-      setIsUserRegistered(response.data.registered);
-    }
-    fetchData();
-  }, [address]);
 
   // useEffect(() => {
   //   async function fetchData() {
@@ -72,11 +59,16 @@ const Tabs = () => {
     }
   }, [router.pathname]);
 
-  function capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get(fetchUrl);
+      setIsUserRegistered(response.data.registered);
+    }
+    fetchData();
+  }, [address]);
+
   return (
-    <div className="hidden items-center text-gray-500 sm:inline-flex md:space-x-1">
+    <>
       {navTabs.map((tab: Tab, index: number) => (
         <a
           key={index}
@@ -93,8 +85,7 @@ const Tabs = () => {
           </div>
         </a>
       ))}
-      <ConnectButton />
-    </div>
+    </>
   );
 };
 

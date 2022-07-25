@@ -9,6 +9,8 @@ import { GET_POST_BY_POST_ID } from "../../graphql/queries";
 import { ADD_COMMENT } from "../../graphql/mutations";
 import Avatar from "../../components/Avatar";
 import Post from "../../components/Post";
+import { Comments, Post as Posts } from "../../typings";
+import { conciseEthAddress } from "../../lib/utils";
 
 type FormData = {
   comment: string;
@@ -26,7 +28,7 @@ function PostPage() {
   const { data: ensData } = useEnsName({
     address: address,
   });
-  const post: Post = data?.getPostListByPostId;
+  const post: Posts = data?.getPostListByPostId;
 
   const {
     register,
@@ -54,9 +56,9 @@ function PostPage() {
   };
 
   return (
-    <div className="mx-auto my-7 max-w-5xl">
+    <div className="mx-auto px-6 my-7 max-w-5xl">
       <Post post={post} />
-      <div className="-mt-1 rounded-b-md border border-t-0 border-gray-300 bg-white p-5  pl-16">
+      <div className="-mt-1 rounded-b-md border border-t-0 border-gray-300 bg-white p-5 ">
         <p className="flex items-center gap-2 text-sm">
           <Avatar seed={address} />
           <p className="mt-4 text-green-800">{ensData || address}</p>
@@ -113,7 +115,7 @@ function PostPage() {
       {/* order the comments! */}
       <div className="-my-5 rounded-b-md border border-t-0 border-gray-300 bg-white py-5 px-10">
         <hr className="py-2" />
-        {post?.comments.map((comment) => (
+        {post?.comments.map((comment: Comments) => (
           <div
             className="relative flex items-center space-x-2 space-y-5"
             key={comment.id}
@@ -125,7 +127,7 @@ function PostPage() {
             <div className="flex flex-col">
               <p className="py-2 text-xs text-gray-400">
                 <span className="font-semibold text-gray-600">
-                  {ensData || comment.username}
+                  {ensData || conciseEthAddress(comment.username)}
                 </span>{" "}
                 <span className="px-1">&bull;</span>
                 <Timeago date={comment.created_at} />

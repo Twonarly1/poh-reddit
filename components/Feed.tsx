@@ -1,11 +1,12 @@
-import React from 'react'
-import { useQuery } from '@apollo/client'
-import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC } from '../graphql/queries'
-import Post from './Post'
+import React from "react";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC } from "../graphql/queries";
+import Post from "./Post";
+import { Post as Posts } from "../typings";
 
 type Props = {
-  topic?: string
-}
+  topic?: string;
+};
 
 const Feed = ({ topic }: Props) => {
   const { data, error } = !topic
@@ -14,9 +15,9 @@ const Feed = ({ topic }: Props) => {
         variables: {
           topic: topic,
         },
-      })
+      });
 
-  const posts: Post[] = !topic ? data?.getPostList : data?.getPostListByTopic
+  const posts: Posts[] = !topic ? data?.getPostList : data?.getPostListByTopic;
 
   return (
     <div className="mt-5 w-full space-y-4">
@@ -24,7 +25,7 @@ const Feed = ({ topic }: Props) => {
         <Post key={post.id} post={post} />
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default Feed
+export default Feed;

@@ -27,9 +27,7 @@
   .dialog {
     @apply inline-block w-full max-w-md transform overflow-hidden rounded-2xl bg-black p-6 text-left align-middle text-black shadow-xl transition-all dark:text-white;
   }
-  .footer {
-    @apply font-medium  tracking-wide underline transition duration-500 ease-in-out hover:text-opacity-50;
-  }
+
   .header {
     @apply h-6 w-6 items-center  hover:bg-gray-100;
   }

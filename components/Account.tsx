@@ -12,13 +12,14 @@ export default function Account() {
 
   return (
     <div className="cursor-pointer flex gap-x-2 items-center px-3 py-2 rounded-md text-sm font-medium outline-none bg-gray-100 text-gray-500">
-      {ensNameData ?? `${ethAddresss}`}{" "}
+      <p className="truncate"> {ensNameData ?? `${ethAddresss}`}</p>{" "}
       <span className="px-1 text-gray-300">|</span>
       <div>
         <div>
           {chain?.id == 1 ? (
-            <CheckIcon className="h-6 w-6 text-green-500 -rotate-12" />
+            <img src="/images/ethereum.svg" className="h-6 w-6"></img>
           ) : (
+            // <CheckIcon className="h-6 w-6 text-green-500 -rotate-12" />
             switchNetwork && (
               <div>
                 {chains.slice(0, 1).map((x) =>

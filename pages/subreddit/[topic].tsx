@@ -6,6 +6,7 @@ import Feed from "../../components/Feed";
 import Engagement from "../../components/Engagement";
 import PostBox from "../../components/PostBox";
 import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC } from "../../graphql/queries";
+import { Post } from "../../typings";
 
 function Subreddit() {
   const {
@@ -24,7 +25,6 @@ function Subreddit() {
     ? postData?.getPostList
     : postData?.getPostListByTopic;
 
-  // console.log(posts)
   return (
     <div className={`h-24 bg-primary-orange p-8`}>
       <div className="-mx-8 mt-10 bg-white">
@@ -41,21 +41,13 @@ function Subreddit() {
       <div className="mx-auto mt-8 max-w-5xl pb-10">
         <PostBox subreddit={topic as string} />
         <div className="flex">
-          {" "}
           <Feed topic={topic as string} />
-          <div className="ml-5">
-            {" "}
-            <div className="sticky top-36 mt-5 hidden h-fit min-w-[300px] rounded-md border-gray-300 bg-white lg:inline">
-              <p className="text-md mb-1 p-4 pb-3 font-bold">Engagement</p>
-              <div>
-                {posts?.map((post, i) => (
-                  <Engagement
-                    key={post.id}
-                    username={post.username}
-                    index={i}
-                  />
-                ))}
-              </div>
+          <div className="sticky top-36 mt-5 hidden h-fit min-w-[300px] rounded-md border-gray-300 bg-white lg:inline">
+            <p className="text-md mb-1 p-4 pb-3 font-bold">Engagement</p>
+            <div>
+              {posts?.map((post, i) => (
+                <Engagement key={post.id} username={post.username} index={i} />
+              ))}
             </div>
           </div>
         </div>

@@ -9,3 +9,7 @@ export const conciseEthAddress = (
     addr.substring(addr.length - 4, addr.length)
   );
 };
+
+export function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}

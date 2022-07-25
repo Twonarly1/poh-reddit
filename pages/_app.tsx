@@ -15,6 +15,7 @@ import { publicProvider } from "wagmi/providers/public";
 import "@rainbow-me/rainbowkit/styles.css";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const { provider } = configureChains(defaultChains, [publicProvider()]);
 
@@ -40,6 +41,7 @@ function MyApp({ Component, pageProps: { pageProps } }: AppProps) {
         </Head>
         <Header />
         <Component {...pageProps} />
+        <Footer />
       </WagmiConfig>
     </ApolloProvider>
   );

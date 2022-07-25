@@ -18,6 +18,7 @@ import { GET_ALL_VOTES_BY_POST_ID } from "../graphql/queries";
 import { ADD_VOTE } from "../graphql/mutations";
 import Avatar from "./Avatar";
 import { conciseEthAddress } from "../lib/utils";
+import { Post, Vote } from "../typings";
 
 type Props = {
   post: Post;
@@ -25,8 +26,7 @@ type Props = {
 
 function Post({ post }: Props) {
   const [vote, setVote] = useState<boolean>();
-  const { address, isConnecting, isDisconnected } = useAccount();
-  //console.log('post:', post)
+  const { address } = useAccount();
   const { data: ensData } = useEnsName({
     address: post?.username,
   });
@@ -97,7 +97,7 @@ function Post({ post }: Props) {
     <>
       <div className="flex  cursor-pointer rounded-md border border-gray-300 bg-white shadow-sm ">
         {/* Votes */}
-        <div className="flex flex-col items-center justify-start space-y-1 rounded-l-md bg-gray-50 p-4 text-gray-400">
+        <div className="xs:flex hidden flex-col items-center justify-start space-y-1 rounded-l-md bg-gray-50 p-4 text-gray-400">
           <ArrowUpIcon
             onClick={() => upVote(true)}
             className={`voteButtons hover:text-blue-400 ${
@@ -114,12 +114,12 @@ function Post({ post }: Props) {
         </div>
 
         <Link href={`/post/${post.id}`}>
-          <div className="w-full p-3 pb-1">
+          <div className="realtive w-full p-3 pb-1">
             {/* Header */}
-            <div className="flex items-center justify-between text-xs text-gray-400">
-              <div className="flex items-center space-x-2">
+            <div className="xs:flex items-center justify-between text-xs text-gray-400">
+              <div className="xs:flex items-center xs:space-x-2">
                 <Avatar seed={post.subreddit[0]?.topic} />
-                <div className="flex space-x-1">
+                <div className="mt-2 xs:mt-0 xs:flex xs:space-x-1">
                   <Link href={`/subreddit/${post.subreddit[0]?.topic}`}>
                     <span className="font-bold text-black hover:text-primary-orange hover:underline">
                       {post.subreddit[0]?.topic}
@@ -127,14 +127,13 @@ function Post({ post }: Props) {
                   </Link>
                   <span className="">&bull;</span>
                   <Link href={`/registry/${post.username}`}>
-                    <span className="hover:underline">
-                      {" "}
+                    <span className="truncate hover:underline">
                       {ensData || conciseEthAddress(post.username)}
                     </span>
                   </Link>
                 </div>
-              </div>{" "}
-              <div className="file:">
+              </div>
+              <div className="flex text-xs">
                 <TimeAgo date={post.created_at} />
               </div>
             </div>
@@ -152,6 +151,23 @@ function Post({ post }: Props) {
                 <p className="hidden sm:inline">
                   {post.comments.length} Comments
                 </p>
+              </div>
+              <div className="flex  items-center justify-start space-y-1 rounded-l-md bg-gray-50 p-4 text-gray-400">
+                <ArrowUpIcon
+                  onClick={() => upVote(true)}
+                  className={`voteButtons hover:text-blue-400 ${
+                    vote && "text-blue-400"
+                  }`}
+                />
+                <p className="text-xs font-bold text-black">
+                  {displayVotes(data)}
+                </p>
+                <ArrowDownIcon
+                  onClick={() => upVote(false)}
+                  className={`voteButtons hover:text-red-400 ${
+                    vote === false && "text-red-400"
+                  }`}
+                />
               </div>
               {/* <div className="postButtons">
                 <GiftIcon className="h-6 w-6" />

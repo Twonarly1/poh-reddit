@@ -1,4 +1,4 @@
-type Comments = {
+export type Comments = {
   created_at: string;
   id: number;
   post_id: number;
@@ -6,7 +6,7 @@ type Comments = {
   username: string;
 };
 
-type Vote = {
+export type Vote = {
   created_at: string;
   id: number;
   post_id: number;
@@ -14,13 +14,13 @@ type Vote = {
   username: string;
 };
 
-type Subreddit = {
+export type Subreddit = {
   created_at: string;
   id: number;
   topic: string;
 };
 
-type Post = {
+export type Post = {
   body: string;
   created_at: string;
   id: number;
@@ -31,4 +31,17 @@ type Post = {
   votes: Vote[];
   comments: Comments[];
   subreddit: Subreddit[];
+};
+
+export type FormData = {
+  postTitle: string;
+  postBody: string;
+  postImage: string;
+  subreddit: string;
+};
+
+export type Tab = {
+  name: string;
+  Icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+  path: string;
 };

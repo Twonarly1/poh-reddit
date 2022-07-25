@@ -14,6 +14,7 @@ import Avatar from "./Avatar";
 import { useAccount } from "wagmi";
 import axios from "axios";
 import { useFetch } from "../lib/useFetch";
+import FormData from "../typings";
 
 type FormData = {
   postTitle: string;
@@ -27,17 +28,9 @@ type Props = {
 };
 
 function PostBox({ subreddit }: Props) {
-  const { isConnected, address } = useAccount();
+  const { address } = useAccount();
   const [isUserRegistered, setIsUserRegistered] = useState<boolean>(false);
   const fetchUrl = `https://api.poh.dev/profiles/${address}`;
-  useEffect(() => {
-    async function fetchData() {
-      const response = await axios.get(fetchUrl);
-      setIsUserRegistered(response.data.registered);
-    }
-    fetchData();
-  }, [address]);
-
   const [imageBoxOpen, setImageBoxOpen] = useState(false);
   const [addSubreddit] = useMutation(ADD_SUBREDDIT);
   const [addPost] = useMutation(ADD_POST, {
@@ -142,9 +135,13 @@ function PostBox({ subreddit }: Props) {
     }
   });
 
-  function getRandomInt(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get(fetchUrl);
+      setIsUserRegistered(response.data.registered);
+    }
+    fetchData();
+  }, [address]);
 
   return (
     <>
@@ -157,7 +154,7 @@ function PostBox({ subreddit }: Props) {
           <input
             {...register("postTitle", { required: true })}
             disabled={!isUserRegistered}
-            className="flex-1 rounded-md bg-gray-50 p-2 pl-5 outline-none "
+            className="flex-1 overflow-hidden rounded-md bg-gray-50 p-2 pl-2 outline-none "
             type="text"
             placeholder={
               address

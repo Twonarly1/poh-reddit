@@ -2,6 +2,7 @@ import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { useIsMounted } from "../lib/useIsMounted";
 import Account from "./Account";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { LightningBoltIcon } from "@heroicons/react/outline";
 
 export default function Connect() {
   const isMounted = useIsMounted();
@@ -22,8 +23,9 @@ export default function Connect() {
       {connector && isMounted && (
         <button
           onClick={() => connect({ connector })}
-          className="cursor-pointer rounded-md px-3 py-2 bg-white text-gray-500 hover:bg-gray-50 text-sm font-medium outline-none"
+          className="cursor-pointer gap-1 flex items-center text-sm font-medium rounded-md px-3 py-2 bg-white text-gray-500 hover:bg-gray-50 outline-none"
         >
+          <LightningBoltIcon className="h-6 w-6" />
           Connect
           {isLoading &&
             connector.id === pendingConnector?.id &&
