@@ -27,7 +27,6 @@ const Header = () => {
           <div className="xs:hidden">
             <ConnectButton />
           </div>
-
           <div className="hidden xs:flex items-center text-gray-500 sm:inline-flex md:space-x-1">
             <Tabs />
             <ConnectButton />

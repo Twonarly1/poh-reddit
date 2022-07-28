@@ -6,9 +6,6 @@ import {
   ChatAlt2Icon,
   HomeIcon,
 } from "@heroicons/react/outline";
-import { useAccount } from "wagmi";
-import axios from "axios";
-import { useFetch } from "../lib/useFetch";
 import { Tab } from "../typings";
 import { capitalizeFirstLetter } from "../lib/utils";
 
@@ -22,23 +19,6 @@ const navTabs: Tab[] = [
 const Tabs = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<string>("");
-  const { isConnected, address } = useAccount();
-  const [isUserRegistered, setIsUserRegistered] = useState<boolean>(false);
-  const fetchUrl = `https://api.poh.dev/profiles/${address}`;
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const response: any = await axios.get(fetchUrl);
-  //     setIsUserRegistered(response);
-  //   }
-  //   fetchData();
-  // }, [isConnected]);
-  // const [url, setUrl] = useState(`https://api.poh.dev/profiles/${address}`);
-
-  // const { isUserRegistered } = useFetch({
-  //   url,
-  //   onSuccess: () => console.log(isUserRegistered),
-  // });
 
   const handleClick = (tabName: string) => {
     if (tabName == "home") {
@@ -58,14 +38,6 @@ const Tabs = () => {
       setActiveTab(router.pathname.substring(1));
     }
   }, [router.pathname]);
-
-  useEffect(() => {
-    async function fetchData() {
-      const response = await axios.get(fetchUrl);
-      setIsUserRegistered(response.data.registered);
-    }
-    fetchData();
-  }, [address]);
 
   return (
     <>

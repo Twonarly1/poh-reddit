@@ -1,4 +1,4 @@
 .next
-nod_modules
+node_modules
 .vscode
 .env

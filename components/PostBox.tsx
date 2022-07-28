@@ -12,8 +12,6 @@ import {
 } from "../graphql/queries";
 import Avatar from "./Avatar";
 import { useAccount } from "wagmi";
-import axios from "axios";
-import { useFetch } from "../lib/useFetch";
 import FormData from "../typings";
 
 type FormData = {
@@ -28,9 +26,11 @@ type Props = {
 };
 
 function PostBox({ subreddit }: Props) {
-  const { address } = useAccount();
-  const [isUserRegistered, setIsUserRegistered] = useState<boolean>(false);
-  const fetchUrl = `https://api.poh.dev/profiles/${address}`;
+  const { address, isConnected } = useAccount();
+  const [pohConditions, setPohConditions] = useState<boolean>(false);
+  const [error, setError] = useState(null);
+  const [isPending, setIsPending] = useState<boolean>(true);
+
   const [imageBoxOpen, setImageBoxOpen] = useState(false);
   const [addSubreddit] = useMutation(ADD_SUBREDDIT);
   const [addPost] = useMutation(ADD_POST, {
@@ -136,15 +136,31 @@ function PostBox({ subreddit }: Props) {
   });
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await axios.get(fetchUrl);
-      setIsUserRegistered(response.data.registered);
-    }
-    fetchData();
-  }, [address]);
+    let _address = address?.toLowerCase();
+    fetch(`https://api.poh.dev/profiles/${_address}`)
+      .then((res) => {
+        // console.log(res);
+        if (!res.ok) {
+          throw Error("user is not found in the poh registry.");
+        }
+        return res.json();
+      })
+      .then((data: any) => {
+        setPohConditions(data.registered);
+        setIsPending(false);
+        setError(null);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setIsPending(false);
+        setError(err.message);
+      });
+  }, []);
 
   return (
     <>
+      {/* {isPending && <div>Loading...</div>}
+      {error && <div>{error}</div>} */}
       <form
         onSubmit={onSubmit}
         className="sticky top-16 z-50 rounded-md border border-primary-orange bg-white p-2"
@@ -153,7 +169,7 @@ function PostBox({ subreddit }: Props) {
           <Avatar />
           <input
             {...register("postTitle", { required: true })}
-            disabled={!isUserRegistered}
+            disabled={!pohConditions}
             className="flex-1 overflow-hidden rounded-md bg-gray-50 p-2 pl-2 outline-none "
             type="text"
             placeholder={

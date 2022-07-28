@@ -12,7 +12,6 @@ import {
   chain,
 } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
-import "@rainbow-me/rainbowkit/styles.css";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import Header from "../components/Header";
 import Footer from "../components/Footer";

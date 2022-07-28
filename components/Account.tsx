@@ -22,9 +22,10 @@ export default function Account() {
             // <CheckIcon className="h-6 w-6 text-green-500 -rotate-12" />
             switchNetwork && (
               <div>
-                {chains.slice(0, 1).map((x) =>
+                {chains.slice(0, 1).map((x: any, index: number) =>
                   x.id === chain?.id ? null : (
                     <button
+                      key={index}
                       className=" flex items-center"
                       onClick={() => switchNetwork(x.id)}
                     >
