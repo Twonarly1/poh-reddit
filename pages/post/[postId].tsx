@@ -59,10 +59,10 @@ function PostPage() {
     <div className="mx-auto px-6 my-7 max-w-5xl">
       <Post post={post} />
       <div className="-mt-1 rounded-b-md border border-t-0 border-gray-300 bg-white p-5 ">
-        <p className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-2 text-sm">
           <Avatar seed={address} />
-          <p className="mt-4 text-green-800">{ensData || address}</p>
-        </p>
+          <span className="mt-4 text-green-800">{ensData || address}</span>
+        </div>
         <div className="flex mt-2 items-start space-x-4">
           <div className="min-w-0 flex-1">
             <form
@@ -101,7 +101,7 @@ function PostPage() {
               <button
                 disabled={!address}
                 type="submit"
-                className="absolute bottom-2 right-2 items-center rounded-md border border-transparent bg-purple-200 px-6 py-2 text-sm font-medium text-white shadow-sm hover:bg-purple-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="absolute bottom-2 cursor-pointer right-2 items-center rounded-md border border-transparent bg-purple-200 px-6 py-2 text-sm font-medium text-white shadow-sm hover:bg-purple-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 Post
               </button>
@@ -124,11 +124,17 @@ function PostPage() {
             </div>
             <div className="flex flex-col">
               <p className="py-2 text-xs text-gray-400">
-                <span className="font-semibold text-gray-600">
-                  {ensData || conciseEthAddress(comment.username)}
-                </span>{" "}
-                <span className="px-1">&bull;</span>
-                <Timeago date={comment.created_at} />
+                <a
+                  className="cursor-pointer"
+                  href={`https://poh-registry.vercel.app/registry/${post.username}`}
+                >
+                  <span className="truncate hover:underline">
+                    {conciseEthAddress(post.username)}
+                  </span>
+                </a>
+                <span className=" cursor-default px-1">
+                  &bull; <Timeago date={comment.created_at} />
+                </span>
               </p>
               <p>{comment.text}</p>
             </div>

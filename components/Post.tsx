@@ -117,50 +117,58 @@ function Post({ post }: Props) {
 
   return (
     <>
-      <div className="flex  cursor-pointer rounded-md border border-gray-300 bg-white shadow-sm ">
-        <Link href={`/post/${post.id}`}>
-          <div className="realtive w-full p-3 pb-1">
-            <div className="xs:flex items-center justify-between text-xs text-gray-400">
-              <div className="xs:flex items-center xs:space-x-2">
-                <Avatar seed={post.subreddit[0]?.topic} />
-                <div className="mt-2 xs:mt-0 xs:flex xs:space-x-1">
-                  <Link href={`/subreddit/${post.subreddit[0]?.topic}`}>
-                    <span className="font-bold text-black hover:text-primary-orange hover:underline">
-                      {post.subreddit[0]?.topic}
-                    </span>
-                  </Link>
-                  <span className="">&bull;</span>
-                  <Link href={`/registry/${post.username}`}>
-                    <span className="truncate hover:underline">
-                      {conciseEthAddress(post.username)}
-                    </span>
-                  </Link>
+      <div className="flex  cursor-default rounded-md border border-gray-300 bg-white shadow-sm ">
+        <div className=" w-full p-3 pb-1 cursor-default">
+          <div className="xs:flex items-center justify-between text-xs text-gray-400">
+            <div className="xs:flex items-center xs:space-x-2">
+              <Avatar seed={post.subreddit[0]?.topic} />
+              <div className="mt-2 xs:mt-0 xs:flex xs:space-x-1">
+                <Link href={`/subreddit/${post.subreddit[0]?.topic}`}>
+                  <span className="font-bold cursor-pointer text-black hover:text-primary-orange hover:underline">
+                    {post.subreddit[0]?.topic}
+                  </span>
+                </Link>
+                <span className="">&bull;</span>
+                <a
+                  className=""
+                  href={`https://poh-registry.vercel.app/registry/${post.username}`}
+                >
+                  <span className="truncate hover:underline">
+                    {conciseEthAddress(post.username)}
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div className="flex text-xs cursor-default">
+              <TimeAgo date={post.created_at} />
+            </div>
+          </div>
+          <div className="p-3">
+            <Link href={`/post/${post.id}`}>
+              <div className="w-full cursor-pointer border-l rounded-l pl-3">
+                <div className="">
+                  <h2 className="text-xl font-semibold">{post.title}</h2>
+                  <p className="mt-2 text-sm font-light">{post.body}</p>
                 </div>
+                <img className="w-full" src={post.image} alt="" />
               </div>
-              <div className="flex text-xs">
-                <TimeAgo date={post.created_at} />
-              </div>
+            </Link>
+          </div>
+          <div className="flex space-x-4 ">
+            <div className="postButtons">
+              <ChatAltIcon className="h-6  text-gray-400 w-6" />
+              <p className="hidden sm:inline">
+                {post.comments.length} Comments
+              </p>
             </div>
-            <div className="py-4  ">
-              <h2 className="text-xl font-semibold">{post.title}</h2>
-              <p className="mt-2 text-sm font-light">{post.body}</p>
+            <div className="postButtons">
+              <p className="text-md flex items-center gap-1">
+                {displayVotes(data)}
+                <span> {displayNumber}</span>
+              </p>
             </div>
-            <img className="w-full" src={post.image} alt="" />
-            <div className="flex space-x-4  ">
-              <div className="postButtons border">
-                <ChatAltIcon className="h-6  text-gray-400 w-6" />
-                <p className="hidden sm:inline">
-                  {post.comments.length} Comments
-                </p>
-              </div>
-              <div className="flex border gap-1 items-center justify-start postButtons p-4 ">
-                <p className="text-md flex items-center gap-1">
-                  {displayVotes(data)}
-                  <span> {displayNumber}</span>
-                </p>
-              </div>
 
-              {/* <div className="postButtons">
+            {/* <div className="postButtons">
                 <GiftIcon className="h-6 w-6" />
                 <p className="hidden sm:inline">Award</p>
               </div>
@@ -176,9 +184,8 @@ function Post({ post }: Props) {
                 <DotsHorizontalIcon className="h-6 w-6" />
                 <p className=""></p>
               </div> */}
-            </div>
           </div>
-        </Link>
+        </div>
       </div>
     </>
   );
