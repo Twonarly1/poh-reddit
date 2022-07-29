@@ -13,7 +13,7 @@
     @apply flex cursor-pointer items-center space-x-2 rounded-sm p-2 text-sm font-semibold hover:bg-gray-100;
   }
   .voteButtons {
-    @apply h-6 w-6 rounded-md p-1 hover:bg-gray-200;
+    @apply h-6 w-6 rounded-md p-1;
   }
   .postButtons {
     @apply flex cursor-pointer items-center space-x-1 rounded-sm p-2 text-sm font-semibold hover:bg-gray-100;

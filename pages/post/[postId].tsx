@@ -98,15 +98,13 @@ function PostPage() {
                 </div>
               </div>
 
-              <div className="absolute bottom-0 right-0 py-2 pl-3 pr-2">
-                <button
-                  disabled={!address}
-                  type="submit"
-                  className=" items-center rounded-md border border-transparent bg-purple-200 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-purple-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  Post
-                </button>
-              </div>
+              <button
+                disabled={!address}
+                type="submit"
+                className="absolute bottom-2 right-2 items-center rounded-md border border-transparent bg-purple-200 px-6 py-2 text-sm font-medium text-white shadow-sm hover:bg-purple-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
+                Post
+              </button>
             </form>
           </div>
         </div>
