@@ -11,7 +11,7 @@ import { capitalizeFirstLetter } from "../lib/utils";
 
 const navTabs: Tab[] = [
   { name: "home", Icon: HomeIcon, path: "/" },
-  { name: "registry", Icon: SearchIcon, path: "https://poh-tools.vercel.app/" },
+  { name: "registry", Icon: SearchIcon, path: "https://poh-registry.vercel.app/" },
   // { name: "reddit", Icon: ChatAlt2Icon},
   //   { name: 'filter', Icon: FilterIcon },
 ];
